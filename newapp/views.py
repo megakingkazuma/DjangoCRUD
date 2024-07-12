@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from .models import Member
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 def index(request):
     mem=Member.objects.all()
@@ -35,3 +36,13 @@ def uprec(request,id):
     mem.country=z
     mem.save()
     return redirect("/")
+
+def register_view(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+    else:
+        form = UserCreationForm()
+    return render(request, "users/register.html", { 'form': form })
